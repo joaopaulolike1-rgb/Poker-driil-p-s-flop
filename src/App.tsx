@@ -1,122 +1,113 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+ import React, { useState } from 'react';
+import { GameState, TrainerConfig, ActionOption, ActionFeedback } from './pokerTrainerTypes';
+import { generateHandForSpot } from './pokerSpotGenerator';
+import { classifyHandComplete } from './pokerEngine';
+import { evaluateUserAction } from './pokerGtoEngine';
+import { TrainerConfigModal } from './TrainerConfigModal';
+import { PokerTableUI } from './PokerTableUI';
+import { ActionPanel } from './ActionPanel';
+import { GtoFeedbackModal } from './GtoFeedbackModal';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [config, setConfig] = useState<TrainerConfig | null>(null);
+  const [gameState, setGameState] = useState<GameState | null>(null);
+  const [currentHandIndex, setCurrentHandIndex] = useState<number>(1);
+  const [feedback, setFeedback] = useState<ActionFeedback | null>(null);
+
+  // 1. Inicia a sessão de treino
+  const handleStartSession = (newConfig: TrainerConfig) => {
+    setConfig(newConfig);
+    setCurrentHandIndex(1);
+    setFeedback(null);
+
+    const initialHand = generateHandForSpot(
+      newConfig.spot,
+      newConfig.heroPosition,
+      1,
+      newConfig.totalHands
+    );
+    setGameState(initialHand);
+  };
+
+  // 2. Processa a tomada de ação do Hero
+  const handleSelectAction = (option: ActionOption) => {
+    if (!gameState) return;
+
+    // Classifica a força da mão do Hero no board atual
+    const handCategory = classifyHandComplete(
+      gameState.heroCards,
+      gameState.boardCards,
+      gameState.street
+    );
+
+    // Avalia a jogada em relação ao banco GTO
+    const result = evaluateUserAction(gameState, option, handCategory);
+    setFeedback(result);
+  };
+
+  // 3. Avança para a próxima mão da sessão
+  const handleNextHand = () => {
+    if (!config) return;
+
+    if (currentHandIndex >= config.totalHands) {
+      // Fim da sessão - Reinicia para a tela de configurações
+      setConfig(null);
+      setGameState(null);
+      setFeedback(null);
+      return;
+    }
+
+    const nextIndex = currentHandIndex + 1;
+    setCurrentHandIndex(nextIndex);
+    setFeedback(null);
+
+    const nextHand = generateHandForSpot(
+      config.spot,
+      config.heroPosition,
+      nextIndex,
+      config.totalHands
+    );
+    setGameState(nextHand);
+  };
+
+  // Exibe a modal de configuração inicial se a sessão não começou
+  if (!config || !gameState) {
+    return <TrainerConfigModal onStartSession={handleStartSession} />;
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <div className="min-h-screen bg-[#0a050c] text-white flex flex-col justify-between overflow-hidden select-none">
+      {/* Cabeçalho da Sessão */}
+      <header className="bg-black/40 border-b border-white/10 px-4 py-2.5 flex justify-between items-center text-xs">
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
+          <span className="text-yellow-500 font-extrabold uppercase tracking-wide">
+            {gameState.spotLabel}
+          </span>
+          <span className="text-gray-400 ml-2">({gameState.heroPosition})</span>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="font-mono bg-white/10 px-2.5 py-1 rounded-full text-gray-300">
+          Mão {gameState.handIndex} / {gameState.totalHands}
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* Mesa do Jogo */}
+      <main className="flex-1 flex items-center justify-center p-2 relative">
+        <PokerTableUI gameState={gameState} />
+      </main>
+
+      {/* Painel Inferior de Ações */}
+      <footer className="w-full">
+        <ActionPanel
+          gameState={gameState}
+          onSelectAction={handleSelectAction}
+          disabled={feedback !== null}
+        />
+      </footer>
+
+      {/* Modal de Feedback GTO */}
+      {feedback && (
+        <GtoFeedbackModal feedback={feedback} onNextHand={handleNextHand} />
+      )}
+    </div>
+  );
 }
-
-export default App
