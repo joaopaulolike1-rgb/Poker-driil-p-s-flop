@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ALL_SPOTS } from './pokerSpotGenerator';
-import { SpotDefinition, Position, TrainerConfig } from './pokerTrainerTypes';
+import type { SpotDefinition, Position, TrainerConfig } from './pokerTrainerTypes';
 
 interface Props {
   onStartSession: (config: TrainerConfig) => void;

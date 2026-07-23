@@ -1,4 +1,4 @@
-import Card from './pokerTypes';
+import type { Card } from './pokerTypes';
 
 // --- INTERFACES DE ESTRUTURA GTO ---
 
@@ -1035,6 +1035,7 @@ export function getFlopGtoStrategyOOP(textureName: string): FlopTextureGtoStrate
   const targetKey = normalizeTextureName(textureName);
   return FLOP_CBET_OOP_DATABASE.find((item) => normalizeTextureName(item.textureName) === targetKey);
 }
+
 
 /**
  * Busca automaticamente a estratégia GTO do Flop a partir do array de cartas do board.

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card } from './pokerTypes';
-import { GameState } from './pokerTrainerTypes';
+import type { Card } from './pokerTypes';
+import type { GameState } from './pokerTrainerTypes';
 
 interface Props {
   gameState: GameState;
@@ -65,7 +65,7 @@ export const PokerTableUI: React.FC<Props> = ({ gameState }) => {
             <div className="w-12 h-12 rounded-full border-2 border-slate-400 bg-slate-800 flex items-center justify-center text-white font-black text-xs shadow-md">
               VILÃO
             </div>
-            {gameState.heroPosition === 'IP' && (
+            {gameState.heroPosition === 'OOP' && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-yellow-400 border border-black flex items-center justify-center text-[10px] font-black text-black">
                 D
               </div>
@@ -110,7 +110,7 @@ export const PokerTableUI: React.FC<Props> = ({ gameState }) => {
             <div className="w-14 h-14 rounded-full border-2 border-yellow-400 bg-amber-950 flex items-center justify-center text-white font-black text-sm shadow-xl ring-4 ring-yellow-500/40 animate-pulse">
               HERO
             </div>
-            {gameState.heroPosition === 'OOP' && (
+            {gameState.heroPosition === 'IP' && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-yellow-400 border border-black flex items-center justify-center text-[10px] font-black text-black">
                 D
               </div>

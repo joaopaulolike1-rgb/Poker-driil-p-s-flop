@@ -1,6 +1,5 @@
-useActionButtons.ts
 import { useMemo } from 'react';
-import { ActionOption, GameState } from './pokerTrainerTypes';
+import type { ActionOption, GameState } from './pokerTrainerTypes';
 
 export function useActionButtons(gameState: GameState): {
   isFacingBet: boolean;

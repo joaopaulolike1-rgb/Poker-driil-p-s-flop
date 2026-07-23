@@ -1,6 +1,6 @@
 import React from 'react';
 import { useActionButtons } from './useActionButtons';
-import { ActionOption, GameState } from './pokerTrainerTypes';
+import type { ActionOption, GameState } from './pokerTrainerTypes';
 
 interface Props {
   gameState: GameState;

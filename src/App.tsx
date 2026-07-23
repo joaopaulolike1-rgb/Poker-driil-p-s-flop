@@ -1,5 +1,5 @@
  import React, { useState } from 'react';
-import { GameState, TrainerConfig, ActionOption, ActionFeedback } from './pokerTrainerTypes';
+ import type { GameState, TrainerConfig, ActionOption, ActionFeedback } from './pokerTrainerTypes';
 import { generateHandForSpot } from './pokerSpotGenerator';
 import { classifyHandComplete } from './pokerEngine';
 import { evaluateUserAction } from './pokerGtoEngine';
@@ -81,12 +81,12 @@ export default function App() {
       <header className="bg-black/40 border-b border-white/10 px-4 py-2.5 flex justify-between items-center text-xs">
         <div>
           <span className="text-yellow-500 font-extrabold uppercase tracking-wide">
-            {gameState.spotLabel}
+            {gameState.spot.label}
           </span>
           <span className="text-gray-400 ml-2">({gameState.heroPosition})</span>
         </div>
         <div className="font-mono bg-white/10 px-2.5 py-1 rounded-full text-gray-300">
-          Mão {gameState.handIndex} / {gameState.totalHands}
+          Mão {gameState.currentHandIndex} / {gameState.totalHands}
         </div>
       </header>
 

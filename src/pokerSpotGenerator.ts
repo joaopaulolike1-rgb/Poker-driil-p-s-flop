@@ -1,6 +1,6 @@
-import { Card, Street } from './pokerTypes';
+import type { Card, Street } from './pokerTypes';
 import { createDeck, shuffleDeck } from './pokerRng';
-import { SpotDefinition, SpotId, GameState, Position } from './pokerTrainerTypes';
+import type { SpotDefinition, SpotId, GameState, Position } from './pokerTrainerTypes';
 
 export const ALL_SPOTS: SpotDefinition[] = [
   // FLOP

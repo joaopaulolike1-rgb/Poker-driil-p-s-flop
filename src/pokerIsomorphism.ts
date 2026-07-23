@@ -1,4 +1,4 @@
-import { Card, Suit } from './pokerTypes';
+import type { Card, Suit } from './pokerTypes';
 import { createDeck } from './pokerRng';
 
 type SuitMapping = Record<Suit, Suit>;

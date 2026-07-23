@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActionFeedback } from './pokerTrainerTypes';
+import type { ActionFeedback } from './pokerTrainerTypes';
 
 interface Props {
   feedback: ActionFeedback;

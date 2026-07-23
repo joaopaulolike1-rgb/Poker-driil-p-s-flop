@@ -1,4 +1,4 @@
-import { Card, Street } from './pokerTypes';
+import type { Card, Street } from './pokerTypes';
 import { GtoAction } from './pokerGtoEngine';
 
 export type Position = 'IP' | 'OOP';

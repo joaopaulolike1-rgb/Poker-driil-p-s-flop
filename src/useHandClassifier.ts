@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Card, Street, BoardTexture, HandCategory, DrawAnalysis, OvercardsAnalysis } from './pokerTypes';
+import type { Card, Street, BoardTexture, HandCategory, DrawAnalysis, OvercardsAnalysis } from './pokerTypes';
 import {
   analyzeBoard,
   analyzeDraws,
